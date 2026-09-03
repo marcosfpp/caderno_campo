@@ -227,25 +227,138 @@
 
 //----------------------------------------------------------------------------------------------------------------------//
 
-// CICLO 3 — LISTAS
-// ListView e ListView.builder — a lista de talhões do Caderno de Campo
+// // CICLO 3 — LISTAS
+// // ListView e ListView.builder — a lista de talhões do Caderno de Campo
+// // Programação para Dispositivos Móveis · IF Goiano — Campus Ceres
+// //
+// // A IDEIA
+// // Você já tem a classe Talhao dos exercícios de Dart. Agora vamos
+// // transformar uma LISTA de talhões em uma LISTA NA TELA, rolável.
+// //
+// // ListView          -> quando há poucos itens fixos, escritos à mão.
+// // ListView.builder  -> quando os itens vêm de uma coleção. Constrói cada
+// //                      item sob demanda (só o que está visível). É o que
+// //                      se usa de verdade.
+// //
+// // COMO FAZER
+// // Cole no dartpad.dev (modo Flutter), rode e siga as tarefas.
+
+// import 'package:flutter/material.dart';
+
+// // A mesma classe Talhao que você já conhece dos exercícios de Dart.
+// class Talhao {
+//   final String nome;
+//   final double areaHa;
+//   final String cultura;
+//   const Talhao({required this.nome, required this.areaHa, required this.cultura});
+// }
+
+// // Os dados da propriedade — a mesma lista dos exercícios.
+// const List<Talhao> talhoes = [
+//   Talhao(nome: 'Talhão 1', areaHa: 38.0, cultura: 'soja'),
+//   Talhao(nome: 'Talhão 2', areaHa: 24.5, cultura: 'milho'),
+//   Talhao(nome: 'Talhão 3', areaHa: 42.0, cultura: 'milho'),
+//   Talhao(nome: 'Talhão 4', areaHa: 31.2, cultura: 'soja'),
+//   Talhao(nome: 'Talhão 5', areaHa: 12.8, cultura: 'sorgo'),
+//   Talhao(nome: 'Talhão 6', areaHa: 19.4, cultura: 'milho'),
+//   Talhao(nome: 'Talhão 7', areaHa: 13.0, cultura: 'feijao'),
+//   Talhao(nome: 'Talhão 8', areaHa: 13.3, cultura: 'soja'),
+// ];
+
+
+// void main() => runApp(const CadernoApp());
+
+// class CadernoApp extends StatelessWidget {
+//   const CadernoApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       theme: ThemeData(
+//         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1E5631)),
+//         useMaterial3: true,
+//       ),
+//       home: const TelaTalhoes(),
+//     );
+//   }
+// }
+
+// class TelaTalhoes extends StatelessWidget {
+//   const TelaTalhoes({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Talhões'),
+//         backgroundColor: const Color(0xFF1E5631),
+//         foregroundColor: Colors.white,
+//       ),
+//       // ListView.builder percorre a lista e cria um item para cada talhão.
+//       // itemCount: quantos itens existem.
+//       // itemBuilder: uma função que recebe o índice e devolve o widget
+//       //              daquele item.
+//       body: ListView.builder(
+//         itemCount: talhoes.length,
+//         itemBuilder: (context, indice) {
+//           final talhao = talhoes[indice];
+//           // ListTile: um item de lista pronto, com título, subtítulo e ícones.
+//           return Card(
+//             child: ListTile(
+//             leading: talhao.cultura == 'soja' ?
+//             const Icon(Icons.grass, color: Color(0xFF1E5631)) :
+//             talhao.cultura == 'milho' ? 
+//             const Icon(Icons.agriculture, color: Color.fromARGB(255, 236, 221, 86)) :
+//             const Icon(Icons.eco, color: Colors.grey),
+//             title: Text(talhao.nome),
+//             subtitle: Text('${talhao.areaHa.toStringAsFixed(1).replaceAll('.', ',')} ha — ${talhao.cultura}'),
+//             trailing: const Icon(Icons.chevron_right),
+            
+//           ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
+
+// // ============================ TAREFAS ============================
+// //
+// // TAREFA 1 — Acrescente dois talhões à lista 'talhoes' e confirme que eles
+// //            aparecem na tela SEM você mexer no ListView. Esse é o ganho do
+// //            builder: a tela se adapta aos dados.
+// //
+// // TAREFA 2 — No subtítulo, formate a área no padrão brasileiro (vírgula no
+// //            lugar do ponto). Dica: talhao.areaHa.toStringAsFixed(1)
+// //            .replaceAll('.', ',').
+// //
+// // TAREFA 3 — Troque o ícone conforme a cultura: espiga para milho, folha
+// //            para soja, e um ícone genérico para o resto. Dica: um if ou um
+// //            switch que devolve o IconData antes de montar o ListTile.
+// //
+// // TAREFA 4 — Envolva cada ListTile em um Card para dar destaque visual a
+// //            cada talhão. O que muda na aparência da lista? mais destacada e mais bonita cada parte da lista
+// //
+// // PERGUNTA: por que ListView.builder é melhor que escrever 6 ListTile na
+// // mão? Pense em uma propriedade com 200 talhões. pela facilidade da função de lidar com listas extensas, praticidade.
+
+// --------------------------------------------------------------------------------------------------------------------------//
+
+// CICLO 4 — JUNTANDO TUDO
+// A tela de resumo da propriedade — a primeira tela "de verdade" do app
 // Programação para Dispositivos Móveis · IF Goiano — Campus Ceres
 //
-// A IDEIA
-// Você já tem a classe Talhao dos exercícios de Dart. Agora vamos
-// transformar uma LISTA de talhões em uma LISTA NA TELA, rolável.
+// A META
+// Compor, em uma tela só, tudo dos ciclos anteriores:
+//   - um cabeçalho com nome da propriedade e área (Ciclo 1);
+//   - uma faixa com três números lado a lado, sem overflow (Ciclo 2);
+//   - a lista de talhões, rolável (Ciclo 3).
 //
-// ListView          -> quando há poucos itens fixos, escritos à mão.
-// ListView.builder  -> quando os itens vêm de uma coleção. Constrói cada
-//                      item sob demanda (só o que está visível). É o que
-//                      se usa de verdade.
-//
-// COMO FAZER
-// Cole no dartpad.dev (modo Flutter), rode e siga as tarefas.
+// Este arquivo já vem com a ESTRUTURA montada e alguns trechos faltando,
+// marcados com // COMPLETE. Preencha-os usando o que praticou nos ciclos.
 
 import 'package:flutter/material.dart';
 
-// A mesma classe Talhao que você já conhece dos exercícios de Dart.
 class Talhao {
   final String nome;
   final double areaHa;
@@ -253,7 +366,6 @@ class Talhao {
   const Talhao({required this.nome, required this.areaHa, required this.cultura});
 }
 
-// Os dados da propriedade — a mesma lista dos exercícios.
 const List<Talhao> talhoes = [
   Talhao(nome: 'Talhão 1', areaHa: 38.0, cultura: 'soja'),
   Talhao(nome: 'Talhão 2', areaHa: 24.5, cultura: 'milho'),
@@ -261,10 +373,7 @@ const List<Talhao> talhoes = [
   Talhao(nome: 'Talhão 4', areaHa: 31.2, cultura: 'soja'),
   Talhao(nome: 'Talhão 5', areaHa: 12.8, cultura: 'sorgo'),
   Talhao(nome: 'Talhão 6', areaHa: 19.4, cultura: 'milho'),
-  Talhao(nome: 'Talhão 7', areaHa: 13.0, cultura: 'feijao'),
-  Talhao(nome: 'Talhão 8', areaHa: 13.3, cultura: 'soja'),
 ];
-
 
 void main() => runApp(const CadernoApp());
 
@@ -278,45 +387,163 @@ class CadernoApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1E5631)),
         useMaterial3: true,
       ),
-      home: const TelaTalhoes(),
+      home: const TelaResumo(),
     );
   }
 }
 
-class TelaTalhoes extends StatelessWidget {
-  const TelaTalhoes({super.key});
+class TelaResumo extends StatelessWidget {
+  const TelaResumo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Área total calculada a partir da lista (revisão dos exercícios de Dart).
+    final areaTotal =
+        talhoes.fold<double>(0, (soma, t) => soma + t.areaHa);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Talhões'),
+        title: const Text('Caderno de Campo do Vale'),
         backgroundColor: const Color(0xFF1E5631),
         foregroundColor: Colors.white,
       ),
-      // ListView.builder percorre a lista e cria um item para cada talhão.
-      // itemCount: quantos itens existem.
-      // itemBuilder: uma função que recebe o índice e devolve o widget
-      //              daquele item.
-      body: ListView.builder(
-        itemCount: talhoes.length,
-        itemBuilder: (context, indice) {
-          final talhao = talhoes[indice];
-          // ListTile: um item de lista pronto, com título, subtítulo e ícones.
-          return Card(
-            child: ListTile(
-            leading: talhao.cultura == 'soja' ?
-            const Icon(Icons.grass, color: Color(0xFF1E5631)) :
-            talhao.cultura == 'milho' ? 
-            const Icon(Icons.agriculture, color: Color.fromARGB(255, 236, 221, 86)) :
-            const Icon(Icons.eco, color: Colors.grey),
-            title: Text(talhao.nome),
-            subtitle: Text('${talhao.areaHa.toStringAsFixed(1).replaceAll('.', ',')} ha — ${talhao.cultura}'),
-            trailing: const Icon(Icons.chevron_right),
-            
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ---- CABEÇALHO (Ciclo 1) ----
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            color: const Color(0xFFD5F5E3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Fazenda Santa Rita do Vale',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Text('Ceres — GO · ${areaTotal.toStringAsFixed(1)} ha no total'),
+              ],
+            ),
           ),
-          );
+
+          // ---- TRÊS NÚMEROS (Ciclo 2) ----
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                // COMPLETE: envolva cada _CardNumero em um Expanded para que
+                // os três dividam a largura sem overflow. Há um SizedBox de
+                // 8 de largura entre eles.
+                Expanded(child: _CardNumero(titulo: 'Talhões', valor: '${talhoes.length}'),
+                ),
+                const SizedBox(width: 8),
+                Expanded(child: _CardNumero(titulo: 'Atividades', valor: '14'),
+                ),
+                const SizedBox(width: 8),
+                Expanded(child: _CardNumero(titulo: 'Último', valor: 'há 3d'),
+                ),
+              ],
+            ),
+          ),
+
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text('Talhões da propriedade',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          ),
+          const SizedBox(height: 8),
+
+          // ---- LISTA (Ciclo 3) ----
+          // COMPLETE: a lista precisa ocupar todo o espaço que sobra na tela.
+          // Dentro de uma Column, um ListView precisa ser envolvido em
+          // Expanded, senão dá erro de altura infinita. Envolva o
+          // ListView.builder abaixo em um Expanded.
+          Expanded(child:ListView.builder(
+            itemCount: talhoes.length,
+            itemBuilder: (context, indice) {
+              final talhao = talhoes[indice];
+
+              return Card(
+                elevation: 2,
+                child: ListTile(
+                contentPadding: const EdgeInsets.all(12),
+                leading: talhao.cultura == 'soja' ? const Icon(Icons.grass, color: Color(0xFF1E5631), size: 32)
+                : talhao.cultura == 'milho' ? const Icon(Icons.agriculture, color: Colors.orange, size: 32)
+                : const Icon(Icons.eco, color: Colors.grey, size: 32),
+                title: Text(talhao.nome, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                subtitle: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                    text:'${talhao.areaHa.toStringAsFixed(1).replaceAll('.', ',')} ha',
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                TextSpan(
+                  text: '- ${talhao.cultura}',
+
+                ),
+                  
+                ]
+                ),
+              ),
+              ),
+            );
+            },
+            ),
+          ),
+        ],
+      ),
+      // Botão flutuante de nova atividade — sem função ainda.
+
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF1E5631),
+        onPressed: () {
+        final culturasUnicas = talhoes.map((t) => t.cultura).toSet().join(', ');
+        showDialog(
+          context: context,
+          builder:(BuildContext context){
+            return AlertDialog(
+              title: const Text('Culturas da Propriedade'),
+              content: Text('Plantando: $culturasUnicas'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text ('Fechar'),
+                ),
+              ],
+            );
+          }
+        );
         },
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _CardNumero extends StatelessWidget {
+  final String titulo;
+  final String valor;
+  const _CardNumero({required this.titulo, required this.valor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEFF7F1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFF1E8449)),
+      ),
+      child: Column(
+        children: [
+          Text(valor,
+              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 2),
+          Text(titulo, style: const TextStyle(fontSize: 12)),
+        ],
       ),
     );
   }
@@ -324,21 +551,16 @@ class TelaTalhoes extends StatelessWidget {
 
 // ============================ TAREFAS ============================
 //
-// TAREFA 1 — Acrescente dois talhões à lista 'talhoes' e confirme que eles
-//            aparecem na tela SEM você mexer no ListView. Esse é o ganho do
-//            builder: a tela se adapta aos dados.
+// TAREFA 1 (COMPLETE) — Faça os três cards de número dividirem a largura
+//            sem overflow (Expanded em cada um).
 //
-// TAREFA 2 — No subtítulo, formate a área no padrão brasileiro (vírgula no
-//            lugar do ponto). Dica: talhao.areaHa.toStringAsFixed(1)
-//            .replaceAll('.', ',').
+// TAREFA 2 (COMPLETE) — Faça a lista ocupar o espaço restante da tela
+//            (Expanded no ListView.builder). Sem isso, o app nem roda.
 //
-// TAREFA 3 — Troque o ícone conforme a cultura: espiga para milho, folha
-//            para soja, e um ícone genérico para o resto. Dica: um if ou um
-//            switch que devolve o IconData antes de montar o ListTile.
+// TAREFA 3 — Faça a tela sua: aplique aqui as duas decisões de interface
+//            que você justificou lá na primeira tela do Caderno de Campo
+//            (contraste alto, alvo de toque generoso, número em destaque),
+//            pensando em quem usa o app de luvas, sob sol, no talhão.
 //
-// TAREFA 4 — Envolva cada ListTile em um Card para dar destaque visual a
-//            cada talhão. O que muda na aparência da lista? mais destacada e mais bonita cada parte da lista
-//
-// PERGUNTA: por que ListView.builder é melhor que escrever 6 ListTile na
-// mão? Pense em uma propriedade com 200 talhões. pela facilidade da função de lidar com listas extensas, praticidade.
-
+// DESAFIO — Torne o botão flutuante útil: ao tocar, mostre um AlertDialog
+//            listando as culturas distintas da propriedade.
